@@ -1,7 +1,10 @@
 {
   "scripts": {
     "day01.1": "node solutions/01.1.js",
-    "day01.2": "node solutions/01.2.js"
+    "day01.2": "node solutions/01.2.js",
+
+    "day02.1": "node solutions/02.1.js",
+    "day02.2": "node solutions/02.2.js"
   },
   "dependencies": {},
   "devDependencies": {
