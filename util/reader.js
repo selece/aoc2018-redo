@@ -1,19 +1,19 @@
 const fs = require('fs');
 
-const read = (path, processor) => {
+const read = (path, processor) => new Promise((resolve, reject) => {
   fs.stat(path, (errorStat) => {
     if (errorStat) {
-      throw new Error(`Could find (stat) file @ ${path} :: ${errorStat}`);
+      reject(new Error(`Could find (stat) file @ ${path} :: ${errorStat}`));
     }
 
     fs.readFile(path, 'utf8', (errorRead, data) => {
       if (errorRead) {
-        throw new Error(`Could not read file @ ${path} :: ${errorRead}`);
+        reject(new Error(`Could not read file @ ${path} :: ${errorRead}`));
       }
 
-      return processor(data);
+      resolve(processor(data));
     });
   });
-};
+});
 
 module.exports = { read };
