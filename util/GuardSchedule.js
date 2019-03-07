@@ -144,14 +144,40 @@ class GuardSchedule {
   }
 
   getCombinedSleepmaps() {
-    return Object.entries(this.schedule).reduce((sleepmaps, guard) => {
-      const [id, days] = guard;
-      sleepmaps[id] = Object.entries(days).reduce((sleepmap, day) => { // eslint-disable-line no-param-reassign
-        const [, minutes] = day;
-        return sleepmap.map((e, i) => e + (minutes[i] ? 0 : 1));
-      }, Array(60).fill(0));
-      return sleepmaps;
-    }, {});
+    return Object.entries(this.schedule)
+      .reduce((sleepmaps, guard) => {
+        const [id, days] = guard;
+        sleepmaps[id] = Object.entries(days) // eslint-disable-line no-param-reassign
+          .reduce((sleepmap, day) => {
+            const [, minutes] = day;
+            return sleepmap.map((e, i) => e + (minutes[i] ? 0 : 1));
+          }, Array(60).fill(0));
+        return sleepmaps;
+      }, {});
+  }
+
+  getConsistentGuard() {
+    return Object.entries(this.getCombinedSleepmaps())
+      .reduce((results, data) => {
+        const [id, sleepmap] = data;
+        const { value, index } = sleepmap.reduce((guardResults, val, idx) => {
+          if (val > guardResults.value) {
+            guardResults = { // eslint-disable-line no-param-reassign
+              value: val,
+              index: idx,
+            };
+          }
+          return guardResults;
+        }, { value: 0, index: undefined });
+
+        if (value > results.value) {
+          results = { // eslint-disable-line no-param-reassign
+            id, minute: index, value,
+          };
+        }
+
+        return results;
+      }, { id: undefined, minute: undefined, value: 0 });
   }
 }
 

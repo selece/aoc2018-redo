@@ -3,9 +3,10 @@ const { GuardSchedule } = require('../util/GuardSchedule');
 
 const processor = (data) => {
   const processed = new GuardSchedule(data.split('\n'));
-  return processed.getCombinedSleepmaps();
+  const { id, minute } = processed.getConsistentGuard();
+  return id * minute;
 };
 
-read('./inputs/day04-test.txt', processor).then((solution) => {
+read('./inputs/day04.txt', processor).then((solution) => {
   console.log(solution);
 });
