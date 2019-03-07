@@ -3,10 +3,9 @@ const { Polymer } = require('../util/Polymer');
 
 const processor = (data) => {
   const poly = new Polymer(data);
-  console.log(poly.react(poly.findReactions()));
-  return -1;
+  return poly.reactUntilDone().length;
 };
 
-read('./inputs/day05-test.txt', processor).then((solution) => {
+read('./inputs/day05.txt', processor).then((solution) => {
   console.log(solution);
 });

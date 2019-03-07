@@ -26,13 +26,24 @@ class Polymer {
     list
       .forEach((react) => {
         const [target] = react;
-        this.data.splice(target, 2, Polymer.NULLED, Polymer.NULLED);
+        this.data.splice(target, 2, Polymer.REMOVE, Polymer.REMOVE);
       });
 
-    return this.data.filter(e => e !== Polymer.NULLED);
+    this.data = this.data.filter(e => e !== Polymer.REMOVE);
+  }
+
+  reactUntilDone() {
+    let reactions = this.findReactions();
+
+    while (reactions.length !== 0) {
+      this.react(reactions);
+      reactions = this.findReactions();
+    }
+
+    return this.data;
   }
 }
 
-Polymer.NULLED = '-';
+Polymer.REMOVE = '-';
 
 module.exports = { Polymer };
