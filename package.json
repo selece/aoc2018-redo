@@ -10,7 +10,10 @@
     "day03.2": "node solutions/03.2.js",
 
     "day04.1": "node solutions/04.1.js",
-    "day04.2": "node solutions/04.2.js"
+    "day04.2": "node solutions/04.2.js",
+
+    "day05.1": "node solutions/05.1.js",
+    "day05.2": "node solutions/05.2.js"
   },
   "dependencies": {},
   "devDependencies": {
