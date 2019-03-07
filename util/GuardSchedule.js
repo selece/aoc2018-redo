@@ -105,7 +105,7 @@ class GuardSchedule {
       }, {});
   }
 
-  findSleepyGuard() {
+  getSleepyGuard() {
     const results = Object.entries(this.schedule)
       .reduce((acc, schedule) => {
         const [id, days] = schedule;
@@ -126,7 +126,7 @@ class GuardSchedule {
       .shift();
   }
 
-  findSleepyMinute(guard) {
+  getSleepyMinute(guard) {
     return Object.entries(this.schedule[guard])
       .reduce((sleepMap, day) => {
         const [, minutes] = day;
@@ -141,6 +141,17 @@ class GuardSchedule {
         return res;
       }, { max: 0, index: 0 })
       .index;
+  }
+
+  getCombinedSleepmaps() {
+    return Object.entries(this.schedule).reduce((sleepmaps, guard) => {
+      const [id, days] = guard;
+      sleepmaps[id] = Object.entries(days).reduce((sleepmap, day) => { // eslint-disable-line no-param-reassign
+        const [, minutes] = day;
+        return sleepmap.map((e, i) => e + (minutes[i] ? 0 : 1));
+      }, Array(60).fill(0));
+      return sleepmaps;
+    }, {});
   }
 }
 
