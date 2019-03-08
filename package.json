@@ -1,17 +1,14 @@
 {
   "scripts": {
+    "test": "jest",
     "day01.1": "node solutions/01.1.js",
     "day01.2": "node solutions/01.2.js",
-
     "day02.1": "node solutions/02.1.js",
     "day02.2": "node solutions/02.2.js",
-
     "day03.1": "node solutions/03.1.js",
     "day03.2": "node solutions/03.2.js",
-
     "day04.1": "node solutions/04.1.js",
     "day04.2": "node solutions/04.2.js",
-
     "day05.1": "node solutions/05.1.js",
     "day05.2": "node solutions/05.2.js"
   },
@@ -19,6 +16,8 @@
   "devDependencies": {
     "eslint": "^5.15.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0"
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.3.0",
+    "jest": "^24.3.1"
   }
 }

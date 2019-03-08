@@ -12,7 +12,7 @@ class Polymer {
           return reacted;
         }
 
-        if (e === a[i + 1].toUpperCase() || e === a[i + 1].toLowerCase()) {
+        if (Math.abs(e.charCodeAt() - a[i + 1].charCodeAt()) === 32) {
           if (reacted.filter(([, target]) => target === i).length === 0) {
             reacted.push([i, i + 1]);
           }
@@ -40,7 +40,7 @@ class Polymer {
       reactions = this.findReactions();
     }
 
-    return this.data;
+    return this.data.join('');
   }
 }
 
