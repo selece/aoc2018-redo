@@ -6,7 +6,11 @@ class InfiniteGrid {
     this.data = input
       .map((line, idx) => {
         const { groups: { x, y } } = line.match(InfiniteGrid.PATTERN);
-        return { x, y, id: idx };
+        return {
+          x: parseInt(x, 10),
+          y: parseInt(y, 10),
+          id: idx,
+        };
       });
 
     // calculate extents (edges) of our grid
@@ -33,6 +37,25 @@ class InfiniteGrid {
     // grab all interior points
     this.inside = this.data
       .filter(e => e.edge === false);
+
+    // full grid window bounded by extents
+    const xrange = Array(Math.max(this.extents.xmax - this.extents.xmin + 1, 0))
+      .fill(0).map((e, i) => e + i + this.extents.xmin);
+    const yrange = Array(Math.max(this.extents.ymax - this.extents.ymin + 1, 0))
+      .fill(0).map((e, i) => e + i + this.extents.ymin);
+
+    this.window = xrange
+      .reduce((xres, i) => {
+        xres.push(
+          yrange.reduce((yres, j) => {
+            yres.push({ x: i, y: j });
+            return yres;
+          }, []),
+        );
+
+        return xres;
+      }, [])
+      .flat();
   }
 
   isEdge({ x, y }) {
@@ -49,41 +72,22 @@ class InfiniteGrid {
       || y < this.extents.ymax;
   }
 
-  window({ x, y }, size) {
-    const xmin = Math.max(x - size, this.extents.xmin);
-    const xmax = Math.min(x + size, this.extents.xmax);
-    const ymin = Math.max(y - size, this.extents.ymin);
-    const ymax = Math.min(y + size, this.extents.ymax);
-
-    const xrange = Array(Math.max(xmax - xmin + 1, 0)).fill(0).map((e, i) => e + i + xmin);
-    const yrange = Array(Math.max(ymax - ymin + 1, 0)).fill(0).map((e, i) => e + i + ymin);
-
-    return xrange.reduce((xres, i) => {
-      xres.push(
-        yrange.reduce((yres, j) => {
-          yres.push({ x: i, y: j });
-          return yres;
-        }, []),
-      );
-
-      return xres;
-    }, []).flat();
-  }
-
-  nearestMap(input) {
-    return input
+  nearestMap() {
+    return this.window
       .map(({ x, y }) => this.data
-        .map(e => ({
-          ...e,
-          distance: InfiniteGrid.distance({ x, y }, { ...e }),
+        .map(point => ({ 
+          ...point,
+          distance: InfiniteGrid.distance({ x, y }, { ...point }),
         }))
         .reduce((min, elem) => {
-          if (elem.distance < min.distance) {
-            min = { ...elem }; // eslint-disable-line no-param-reassign
+          if (min.distance > elem.distance) {
+            min = { // eslint-disable-line no-param-reassign
+              x, y, id: elem.id, edge: elem.edge, distance: elem.distance,
+            };
           }
 
           return min;
-        }, { distance: Infinity, id: undefined }));
+        }, { distance: Infinity }));
   }
 
   static distance({ x: xa, y: ya }, { x: xb, y: yb }) {
