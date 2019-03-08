@@ -30,6 +30,7 @@ class Polymer {
       });
 
     this.data = this.data.filter(e => e !== Polymer.REMOVE);
+    return this.data.join('');
   }
 
   reactUntilDone() {
@@ -39,6 +40,13 @@ class Polymer {
       this.react(reactions);
       reactions = this.findReactions();
     }
+
+    return this.data.join('');
+  }
+
+  remove(list) {
+    this.data = this.data
+      .filter(e => list.map(l => l !== e).every(f => f));
 
     return this.data.join('');
   }
