@@ -65,29 +65,22 @@ class InfiniteGrid {
       || y === this.extents.ymax;
   }
 
-  isInside({ x, y }) {
-    return x > this.extents.xmin
-      || x < this.extents.xmax
-      || y > this.extents.ymin
-      || y < this.extents.ymax;
-  }
-
   nearestMap() {
+    // iterate through all points in the bounded window
     return this.window
+
+      // for each point in the window, take all of the coordinates
+      // and calculate the distance to each one, store that
       .map(({ x, y }) => this.data
-        .map(point => ({ 
+        .map(point => ({
           ...point,
           distance: InfiniteGrid.distance({ x, y }, { ...point }),
         }))
-        .reduce((min, elem) => {
-          if (min.distance > elem.distance) {
-            min = { // eslint-disable-line no-param-reassign
-              x, y, id: elem.id, edge: elem.edge, distance: elem.distance,
-            };
-          }
 
-          return min;
-        }, { distance: Infinity }));
+        // TODO: filter each distance list for only the smallest distance
+        // if there are more than 2 smallest entries, null it
+        
+      );
   }
 
   static distance({ x: xa, y: ya }, { x: xb, y: yb }) {
